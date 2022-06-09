@@ -1,0 +1,23 @@
+package activities;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class Activity5_2{
+    public static void main(String[] args) throws InterruptedException {
+        WebDriver driver=new FirefoxDriver();
+        driver.get("https://training-support.net/selenium/dynamic-controls");
+        String title=driver.getTitle();
+        System.out.println("Title is " +title);
+        WebElement checkboxSelection=driver.findElement(By.xpath("//input[@name='toggled']"));
+        System.out.println("displayed status before removal is: " +checkboxSelection.isSelected());
+        driver.findElement(By.xpath("//input[@name='toggled']")).click();
+        System.out.println("displayed status after removal is: " +checkboxSelection.isSelected());
+        Thread.sleep(5000);
+        driver.close();
+
+    }
+}
