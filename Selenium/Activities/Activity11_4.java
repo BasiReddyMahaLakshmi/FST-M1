@@ -1,44 +1,49 @@
 package activities;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Action;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
-public class Activity11_4{
-
-    public static void main(String[] args) throws InterruptedException {
-        WebDriver driver=new FirefoxDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+public class Activity11_4 {
+    public static void main(String[] args) {
+        WebDriver driver = new FirefoxDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         driver.get("https://www.training-support.net/selenium/tab-opener");
-        String title=driver.getTitle();
-        System.out.println("Title is: " +title);
-
-        String parentHandle = driver.getWindowHandle();
-        System.out.println("Handle of Tab is: " +parentHandle);
-
-        driver.findElement(By.id("launcher")).click();
+        System.out.println("Page title is: " + driver.getTitle());
+        String parentWindow = driver.getWindowHandle();
+        System.out.println("Parent Window: " + parentWindow);
+        driver.findElement(By.linkText("Click Me!")).click();
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
+        Set<String> allWindowHandles = driver.getWindowHandles();
+        System.out.println("All window handles: " + allWindowHandles);
 
-        Set<String> handles = driver.getWindowHandles();
-        System.out.println(handles);
-        for(String handle : driver.getWindowHandles()) {
-                driver.switchTo().window(handle);
-            }
+        for (String handle : driver.getWindowHandles()) {
+            driver.switchTo().window(handle);
+        }
 
-        System.out.println("New tab title is: " +driver.getWindowHandle());
-        WebElement newTabHeading = driver.findElement(By.cssSelector("div.content"));
-        System.out.println("New tab heading is: " + newTabHeading.getText());
-
-        driver.close();
-
+        System.out.println("Current window handle: " + driver.getWindowHandle());
+        wait.until(ExpectedConditions.titleIs("Newtab"));
+        System.out.println("New Tab Title is: " + driver.getTitle());
+        String newTabText = driver.findElement(By.cssSelector("div.content")).getText();
+        System.out.println("New tab heading is: " + newTabText);
+        driver.findElement(By.linkText("Open Another One!")).click();
+        wait.until(ExpectedConditions.numberOfWindowsToBe(3));
+        allWindowHandles = driver.getWindowHandles();
+        System.out.println("All window handles: " + allWindowHandles);
+        for (String handle : driver.getWindowHandles()) {
+            driver.switchTo().window(handle);
+        }
+        System.out.println("New tab handle: " + driver.getWindowHandle());
+        wait.until(ExpectedConditions.titleIs("Newtab2"));
+        System.out.println("New Tab Title is: " + driver.getTitle());
+        newTabText = driver.findElement(By.cssSelector("div.content")).getText();
+        System.out.println("New tab heading is: " + newTabText);
+        driver.quit();
     }
 }
